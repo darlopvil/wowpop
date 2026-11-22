@@ -38,15 +38,19 @@ const (
 type clienteWallapop struct {
 	http *http.Client
 	// api serves searches, filters and a seller's items; web serves the
-	// pages, whose data comes from Next.js (_next/data and __NEXT_DATA__).
-	api, web string
+	// pages, whose data comes from Next.js (_next/data and __NEXT_DATA__);
+	// cdn serves the photos.
+	api, web, cdn string
 }
 
 var wallapop = nuevoCliente("https://api.wallapop.com", "https://es.wallapop.com")
 
 func nuevoCliente(api, web string) *clienteWallapop {
-	c := &clienteWallapop{api: strings.TrimSuffix(api, "/"), web: strings.TrimSuffix(web, "/")}
-	permitidos := map[string]bool{hostDe(c.api): true, hostDe(c.web): true}
+	c := &clienteWallapop{
+		api: strings.TrimSuffix(api, "/"),
+		web: strings.TrimSuffix(web, "/"),
+		cdn: "https://cdn.wallapop.com",
+	}
 	c.http = &http.Client{
 		Timeout: 15 * time.Second,
 		// Redirects are followed only within Wallapop's own hosts.
@@ -54,7 +58,7 @@ func nuevoCliente(api, web string) *clienteWallapop {
 			if len(previas) >= 3 {
 				return errors.New("too many redirects")
 			}
-			if !permitidos[r.URL.Host] {
+			if h := r.URL.Host; h != hostDe(c.api) && h != hostDe(c.web) && h != hostDe(c.cdn) {
 				return fmt.Errorf("redirect to %s refused", r.URL.Host)
 			}
 			return nil
@@ -120,12 +124,19 @@ func (c *clienteWallapop) pedirHTML(ctx context.Context, direccion string) (resp
 
 // urlBusqueda is a new search with the parameters the website sends. Only
 // the organic results are asked for: never the "similar items" filler.
-func (c *clienteWallapop) urlBusqueda(palabras string, latitud, longitud float64) string {
+// orden is one of the website's order_by values, most_relevance by default.
+func (c *clienteWallapop) urlBusqueda(palabras, orden string, latitud, longitud float64) string {
+	return c.urlBusquedaID(palabras, orden, nuevoUUID(), latitud, longitud)
+}
+
+// urlBusquedaID is urlBusqueda with a given search_id, so going back to the
+// first page of a search is the same search for Wallapop, not a new one.
+func (c *clienteWallapop) urlBusquedaID(palabras, orden, id string, latitud, longitud float64) string {
 	q := url.Values{
 		"keywords":       {palabras},
 		"source":         {"search_box"},
-		"order_by":       {"most_relevance"},
-		"search_id":      {nuevoUUID()},
+		"order_by":       {orden},
+		"search_id":      {id},
 		"latitude":       {strconv.FormatFloat(latitud, 'f', -1, 64)},
 		"longitude":      {strconv.FormatFloat(longitud, 'f', -1, 64)},
 		"search_country": {"ES"},
@@ -133,6 +144,18 @@ func (c *clienteWallapop) urlBusqueda(palabras string, latitud, longitud float64
 		"section_type":   {"keyword_search"},
 	}
 	return c.api + "/api/v3/search/section?" + q.Encode()
+}
+
+// urlSiguiente is the next page of a search. The token, meta.next_page of
+// the previous page, already carries the keywords, the order and the
+// location, so nothing else is sent; Wallapop lets it expire after a day.
+func (c *clienteWallapop) urlSiguiente(token string) string {
+	return c.api + "/api/v3/search/section?next_page=" + url.QueryEscape(token)
+}
+
+// urlFoto is a photo on the image server, at one of the widths it serves.
+func (c *clienteWallapop) urlFoto(ruta, ancho string) string {
+	return c.cdn + "/" + ruta + "?pictureSize=" + url.QueryEscape(ancho)
 }
 
 // urlArticulosVendedor is a page of a seller's items: the first one without

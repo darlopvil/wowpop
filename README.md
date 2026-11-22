@@ -33,6 +33,7 @@ same two Wallapop hosts the website uses:
 |---|---|
 | `api.wallapop.com` | searches, filters and a seller's items |
 | `es.wallapop.com` | listing and profile data, from the website's own Next.js data routes |
+| `cdn.wallapop.com` | photos, passed on through wowpop |
 
 Requests carry a browser `User-Agent`, `Accept-Language: es-ES` and
 `X-DeviceOS: 0`, the one header the API requires. Redirects are only
@@ -56,7 +57,7 @@ real responses.
 ### Requirements
 
 - Docker, or Go 1.26 or later.
-- Outbound HTTPS to `api.wallapop.com` and `es.wallapop.com`.
+- Outbound HTTPS to `api.wallapop.com`, `es.wallapop.com` and `cdn.wallapop.com`.
 
 ### With Docker
 
@@ -98,6 +99,8 @@ Flags win over variables.
 | Route | |
 |---|---|
 | `/` | home page; it never talks to Wallapop |
+| `/search?keywords=…` | search results; `orden=nuevos`, `baratos` or `caros` changes the order, and `b` and `p` open a numbered page of a search wowpop remembers |
+| `/foto/…` | photos from Wallapop's image server, at the widths the website uses |
 | `/static/…` | styles, fonts and icons |
 | `/about`, `/robots.txt`, `/favicon.ico` | |
 

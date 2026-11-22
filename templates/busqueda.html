@@ -1,0 +1,50 @@
+{{ define "contenido" }}
+{{ with .Resultados }}
+<section class="busqueda">
+    <div class="busqueda-cabecera">
+        <h1 class="busqueda-titulo">«{{ .Palabras }}»</h1>
+        <nav class="ordenes" aria-label="Ordenar">
+            {{ range .Ordenes }}{{ if .Activa }}<span class="orden orden-activa" aria-current="true">{{ .Nombre }}</span>{{ else }}<a class="orden" href="{{ .Enlace }}">{{ .Nombre }}</a>{{ end }}
+            {{ end }}
+        </nav>
+    </div>
+    {{ if .Articulos }}
+    <ul class="resultados">
+        {{ range .Articulos }}
+        <li>
+            <a class="tarjeta{{ if .Reservado }} tarjeta-reservada{{ end }}"{{ if .Enlace }} href="{{ .Enlace }}"{{ end }}>
+                <span class="tarjeta-foto">
+                    {{ if .Foto }}<img src="{{ .Foto }}" alt="" width="320" height="320" loading="lazy">{{ end }}
+                    {{ if or .Reservado .Envio .Garantia .Destacado }}
+                    <span class="chapas">
+                        {{ if .Reservado }}<span class="chapa chapa-reservado">Reservado</span>{{ end }}
+                        {{ if .Envio }}<span class="chapa chapa-envio">Envío</span>{{ end }}
+                        {{ if .Garantia }}<span class="chapa chapa-garantia">Garantía</span>{{ end }}
+                        {{ if .Destacado }}<span class="chapa chapa-destacado">Destacado</span>{{ end }}
+                    </span>
+                    {{ end }}
+                </span>
+                <span class="tarjeta-precio">{{ .Precio }}</span>
+                <span class="tarjeta-titulo">{{ .Titulo }}</span>
+                {{ if .Ciudad }}<span class="tarjeta-lugar">{{ .Ciudad }}</span>{{ end }}
+            </a>
+        </li>
+        {{ end }}
+    </ul>
+    {{ else }}
+    <div class="aviso cristal">
+        <h2>Sin resultados</h2>
+        <p>No hay nada para «{{ .Palabras }}». Prueba con otras palabras.</p>
+    </div>
+    {{ end }}
+    {{ if .Paginas }}
+    <nav class="paginas" aria-label="Páginas">
+        {{ with .Anterior }}<a class="orden" href="{{ . }}" rel="prev">‹ Anterior</a>{{ end }}
+        {{ range .Paginas }}{{ if .Hueco }}<span class="paginas-hueco">…</span>{{ else if .Activa }}<span class="orden orden-activa" aria-current="page">{{ .Numero }}</span>{{ else }}<a class="orden" href="{{ .Enlace }}">{{ .Numero }}</a>{{ end }}
+        {{ end }}
+        {{ with .Siguiente }}<a class="boton" href="{{ . }}" rel="next">Siguiente ›</a>{{ end }}
+    </nav>
+    {{ end }}
+</section>
+{{ end }}
+{{ end }}

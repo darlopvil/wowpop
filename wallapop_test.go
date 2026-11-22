@@ -32,7 +32,7 @@ func TestTheAPIGetsTheBrowserHeadersAndXDeviceOS(t *testing.T) {
 		_, _ = w.Write([]byte(`{}`))
 	}, http.NotFound)
 
-	if _, err := wallapop.pedirJSON(context.Background(), wallapop.urlBusqueda("gameboy", 1, 2)); err != nil {
+	if _, err := wallapop.pedirJSON(context.Background(), wallapop.urlBusqueda("gameboy", "most_relevance", 1, 2)); err != nil {
 		t.Fatal(err)
 	}
 	for cabecera, valor := range map[string]string{
@@ -115,7 +115,7 @@ func TestRedirectsWithinWallapopAreFollowed(t *testing.T) {
 }
 
 func TestSearchAsksForOrganicResultsOnly(t *testing.T) {
-	u, err := url.Parse(wallapop.urlBusqueda("tomb raider", latitudPorDefecto, longitudPorDefecto))
+	u, err := url.Parse(wallapop.urlBusqueda("tomb raider", "most_relevance", latitudPorDefecto, longitudPorDefecto))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -146,8 +146,8 @@ func TestSearchAsksForOrganicResultsOnly(t *testing.T) {
 }
 
 func TestEverySearchGetsItsOwnID(t *testing.T) {
-	a, _ := url.Parse(wallapop.urlBusqueda("x", 0, 0))
-	b, _ := url.Parse(wallapop.urlBusqueda("x", 0, 0))
+	a, _ := url.Parse(wallapop.urlBusqueda("x", "newest", 0, 0))
+	b, _ := url.Parse(wallapop.urlBusqueda("x", "newest", 0, 0))
 	if a.Query().Get("search_id") == b.Query().Get("search_id") {
 		t.Error("two searches share a search_id")
 	}

@@ -92,7 +92,7 @@ func (s *sonda) linea(clave string, valor any) {
 }
 
 func (s *sonda) busqueda(palabras string) {
-	_, d := s.pedir("search", wallapop.urlBusqueda(palabras, latitudPorDefecto, longitudPorDefecto), false)
+	_, d := s.pedir("search", wallapop.urlBusqueda(palabras, "most_relevance", latitudPorDefecto, longitudPorDefecto), false)
 	if d == nil {
 		return
 	}

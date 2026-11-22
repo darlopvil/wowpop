@@ -402,6 +402,183 @@ h1, h2, h3 {
 
 .texto .dibujo-tierra { background-image: url("/static/arte/tierra.svg"); }
 
+/* ---------- search results ---------- */
+
+.busqueda-cabecera {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: .7rem 1rem;
+}
+
+.busqueda-titulo {
+    margin: 0;
+    font-size: 1.4rem;
+    overflow-wrap: anywhere;
+}
+
+.ordenes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem;
+}
+
+.orden {
+    padding: .3em .95em;
+    border: 1px solid var(--cristal-borde);
+    border-radius: 999px;
+    font-size: .9rem;
+    color: var(--texto);
+    text-decoration: none;
+    background: rgba(255, 255, 255, .06);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .18);
+}
+
+.orden:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, .13);
+}
+
+.orden-activa {
+    font-weight: 600;
+    color: #022a25;
+    border-color: var(--aqua-oscuro);
+    background: linear-gradient(180deg, var(--aqua-claro) 0%, var(--aqua-vivo) 48%, var(--aqua) 52%, #19d3bc 100%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .75), 0 0 12px rgba(46, 230, 207, .35);
+}
+
+.resultados {
+    list-style: none;
+    margin: 1.3rem 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(165px, 1fr));
+    gap: 1rem;
+}
+
+/* Cards look like glass but have no blur: forty blurred cards over moving
+   bubbles would have to be redrawn on every frame. */
+.tarjeta {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: .55rem .55rem .75rem;
+    border: 1px solid var(--cristal-borde);
+    border-radius: 16px;
+    color: var(--texto);
+    text-decoration: none;
+    background: var(--brillo), linear-gradient(180deg, rgba(20, 60, 80, .72), rgba(6, 25, 43, .82));
+    box-shadow: var(--cristal-brillo), 0 6px 18px rgba(0, 0, 0, .4);
+    transition: box-shadow .15s, transform .15s;
+}
+
+.tarjeta:hover {
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: var(--cristal-brillo), 0 0 22px rgba(46, 230, 207, .35), 0 8px 22px rgba(0, 0, 0, .45);
+}
+
+.tarjeta-foto {
+    position: relative;
+    aspect-ratio: 1;
+    overflow: hidden;
+    border-radius: 11px;
+    background: radial-gradient(circle at 50% 40%, rgba(127, 243, 226, .12), rgba(0, 0, 0, .3));
+}
+
+.tarjeta-foto img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.tarjeta-reservada img {
+    opacity: .55;
+    filter: saturate(.6);
+}
+
+.tarjeta-precio {
+    margin-top: .55rem;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--aqua-claro);
+}
+
+.tarjeta-titulo {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+    font-size: .92rem;
+    line-height: 1.3;
+}
+
+.tarjeta-lugar {
+    margin-top: auto;
+    padding-top: .35rem;
+    font-size: .8rem;
+    color: var(--tenue);
+}
+
+/* Glossy gel badges on the photo. */
+.chapas {
+    position: absolute;
+    top: .4rem;
+    left: .4rem;
+    right: .4rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: .25rem;
+}
+
+.chapa {
+    padding: .12em .6em;
+    border-radius: 999px;
+    font-size: .72rem;
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, .35);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .6), 0 1px 4px rgba(0, 0, 0, .45);
+}
+
+.chapa-reservado {
+    color: #3a2400;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, .4);
+    background: linear-gradient(180deg, #ffe2a3 0%, #ffbf47 48%, #f0a020 52%, #ffc95e 100%);
+}
+
+.chapa-envio {
+    color: #022a25;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, .4);
+    background: linear-gradient(180deg, var(--aqua-claro) 0%, var(--aqua-vivo) 48%, var(--aqua) 52%, #19d3bc 100%);
+}
+
+.chapa-garantia {
+    color: #183400;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, .4);
+    background: linear-gradient(180deg, #dcf9a8 0%, #a6e65c 48%, #7cc232 52%, #a9e36a 100%);
+}
+
+.chapa-destacado { background: linear-gradient(180deg, #d6c8ff 0%, #9c7cf4 48%, #7a55e0 52%, #a68cf2 100%); }
+
+/* Page links: the same pills as the orders, and Siguiente as the main
+   button, since it is the usual next step. */
+.paginas {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: .4rem;
+    margin: 1.8rem 0 0;
+}
+
+.paginas .orden { min-width: 2.4em; text-align: center; }
+
+.paginas-hueco { color: var(--tenue); }
+
 /* ---------- footer ---------- */
 
 .pie {
@@ -599,6 +776,11 @@ h1, h2, h3 {
     .pecera { left: 10px; top: 360px; width: 92px; height: 92px; }
 
     .texto-icono { width: 60px; }
+
+    .resultados {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: .7rem;
+    }
 
     .texto, .aviso { padding: 1.2rem 1.2rem 1.5rem; }
 }

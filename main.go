@@ -81,6 +81,10 @@ func rutas() http.Handler {
 	})
 
 	// Browsers request /favicon.ico without looking at the <head>.
+	mux.HandleFunc("/search", paginaBusqueda)
+
+	mux.HandleFunc("/foto/", paginaFoto)
+
 	mux.HandleFunc("/favicon.ico", func(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, estatico("favicon.svg"), http.StatusMovedPermanently)
 	})

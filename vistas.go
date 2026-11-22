@@ -16,6 +16,11 @@ type datosPagina struct {
 	// Inicio hides the header search box on the home page, which has its own
 	// big one.
 	Inicio bool
+	// Resultados is a page of search results.
+	Resultados *resultadosBusqueda
+	// Volver, on an error page, links a fresh copy of what failed instead
+	// of the home page.
+	Volver string
 }
 
 var funciones = template.FuncMap{
@@ -30,9 +35,10 @@ func cargarPlantilla(pagina string) *template.Template {
 }
 
 var plantillas = map[string]*template.Template{
-	"inicio": cargarPlantilla("inicio"),
-	"about":  cargarPlantilla("about"),
-	"error":  cargarPlantilla("error"),
+	"inicio":   cargarPlantilla("inicio"),
+	"about":    cargarPlantilla("about"),
+	"error":    cargarPlantilla("error"),
+	"busqueda": cargarPlantilla("busqueda"),
 }
 
 // renderizar executes the template into a buffer before writing anything, so

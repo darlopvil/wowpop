@@ -3,6 +3,6 @@
     <img class="aviso-icono" src="{{ estatico "arte/tierra.svg" }}" alt="">
     <h1>{{ .Titulo }}</h1>
     <p>{{ .Mensaje }}</p>
-    <p><a class="boton" href="/">Volver a la portada</a></p>
+    <p>{{ if .Volver }}<a class="boton" href="{{ .Volver }}">Volver a buscar</a>{{ else }}<a class="boton" href="/">Volver a la portada</a>{{ end }}</p>
 </section>
 {{ end }}
