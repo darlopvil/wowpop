@@ -1,15 +1,16 @@
 {{ define "contenido" }}
 <article class="texto cristal">
+    <img class="texto-icono" src="{{ estatico "arte/tierra-reciclaje.svg" }}" alt="">
     <h1>Acerca de wowpop</h1>
     <p>wowpop es una forma de mirar Wallapop sin rastreadores, sin anuncios y sin JavaScript. Tu navegador solo se conecta a wowpop, y es wowpop quien habla con Wallapop: le pide lo mismo que pide su web a un visitante sin cuenta, en el momento en que lo necesitas, y te lo enseña en HTML sencillo.</p>
 
     <h2>Características</h2>
-    <ul>
+    <ul class="lista-ok">
         <li>Sin JavaScript: todo funciona con los scripts desactivados.</li>
         <li>Tu navegador nunca contacta con Wallapop ni con terceros: estilos, fuentes e iconos los sirve wowpop.</li>
         <li>Sin cuentas, sin cookies y sin rastreadores.</li>
         <li>Wallapop no recibe ningún identificador de tu dispositivo.</li>
-        <li>Ligera: la primera visita descarga unos 60 KB en total, casi todo la fuente. Después, cada página pesa unos pocos KB, porque los estilos y la fuente se quedan en tu navegador un año.</li>
+        <li>Ligera: la primera visita descarga unos 85 KB en total, más de la mitad la fuente. Después, cada página pesa unos pocos KB, porque los estilos y la fuente se quedan en tu navegador un año.</li>
         <li>Estilo Frutiger Aero, el de Windows Vista y 7, en versión oscura.</li>
     </ul>
 
@@ -23,9 +24,23 @@
     </ul>
 
     <h2>Licencias</h2>
-    <ul>
+    <ul class="lista-licencias">
         <li>wowpop: <a href="https://github.com/darlopvil/wowpop/blob/main/LICENSE">GNU AGPL-3.0</a> o posterior.</li>
         <li>Fuente Open Sans: <a href="{{ estatico "fuentes/OFL-OpenSans.txt" }}">SIL Open Font License 1.1</a>.</li>
+    </ul>
+
+    <h2>Ilustraciones</h2>
+    <p>La colina, las auroras y las burbujas están dibujadas para wowpop. El resto viene de <a href="https://openclipart.org/">Openclipart</a> y es de dominio público (CC0); aun así, gracias a sus autores:</p>
+    <ul>
+        <li class="dibujo-mariposas">Mariposas: <a href="https://openclipart.org/detail/346015">Five Butterflies</a>, de j4p4n.</li>
+        <li class="dibujo-pez-dorado">Pez dorado: <a href="https://openclipart.org/detail/181437">Fish icons</a>, de vectorsme.</li>
+        <li class="dibujo-pez-angel">Pez ángel: <a href="https://openclipart.org/detail/122389">Angel Fish</a>, de cgillis73.</li>
+        <li class="dibujo-brotes">Brotes de la colina: <a href="https://openclipart.org/detail/237408">Green Leaves Graphics</a>, de GoodFreeArt.</li>
+        <li class="dibujo-check">Marcas verdes: <a href="https://openclipart.org/detail/34723">tasto 7</a>, de francesco_rollandin.</li>
+        <li class="dibujo-info">Botones de información: <a href="https://openclipart.org/detail/7982">Small blue 'i' info button</a>, de TzeenieWheenie.</li>
+        <li class="dibujo-pergamino">Pergamino: <a href="https://openclipart.org/detail/351206">Blank Scroll</a>, de j4p4n.</li>
+        <li class="dibujo-tierra-reciclaje">Tierra con flechas: <a href="https://openclipart.org/detail/2213">crystal earth recycle</a>, de kuba.</li>
+        <li class="dibujo-tierra">Tierra: <a href="https://openclipart.org/detail/3320">Earth</a>, de barretr.</li>
     </ul>
 </article>
 {{ end }}

@@ -33,6 +33,10 @@
     --cristal-borde: rgba(190, 240, 255, .22);
     --cristal-brillo: inset 0 1px 0 rgba(255, 255, 255, .32), inset 0 0 0 1px rgba(255, 255, 255, .04);
     --sombra: 0 10px 34px rgba(0, 0, 0, .5);
+    --brillo: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, .07) 40%, transparent 50%);
+    --burbuja:
+        radial-gradient(ellipse 24% 15% at 32% 26%, rgba(255, 255, 255, .6), transparent),
+        radial-gradient(circle, rgba(127, 243, 226, .05) 0 56%, rgba(127, 243, 226, .16) 82%, rgba(225, 255, 250, .45) 96%, transparent 100%);
 
     --letra: "Open Sans", "Segoe UI", system-ui, sans-serif;
 }
@@ -44,6 +48,11 @@
 html {
     min-height: 100%;
     background:
+        radial-gradient(circle 220px at 6% 4%, rgba(255, 232, 160, .16), transparent 70%),
+        radial-gradient(circle 70px at 24% 40%, rgba(127, 243, 226, .07), transparent 70%),
+        radial-gradient(circle 110px at 78% 26%, rgba(140, 200, 255, .06), transparent 70%),
+        radial-gradient(circle 50px at 62% 74%, rgba(139, 220, 74, .07), transparent 70%),
+        url("/static/arte/auroras.svg") center / cover no-repeat,
         radial-gradient(120% 70% at 15% -10%, rgba(19, 193, 172, .30), transparent 60%),
         radial-gradient(90% 60% at 100% 10%, rgba(46, 120, 230, .22), transparent 65%),
         radial-gradient(80% 50% at 50% 115%, rgba(139, 220, 74, .12), transparent 70%),
@@ -60,27 +69,57 @@ body {
     color: var(--texto);
 }
 
-/* Light streaks and bubbles, drawn in CSS: nothing to download. */
+/* Light streaks, and bubbles that rise slowly on every page, drawn in CSS:
+   nothing to download. Each bubble rises on transform and sways on
+   translate, two separate animations, so its speed stays even while it
+   drifts from side to side. will-change gives every moving thing its own
+   layer: the browser then moves it in fractions of a pixel instead of
+   jumping a whole pixel at a time, which is what makes slow movement
+   stutter. */
 .burbujas {
     position: fixed;
     inset: 0;
     z-index: -1;
+    overflow: hidden;
     pointer-events: none;
     background:
         linear-gradient(115deg, transparent 38%, rgba(127, 243, 226, .08) 46%, transparent 54%),
-        linear-gradient(125deg, transparent 55%, rgba(120, 170, 255, .06) 62%, transparent 70%),
-        radial-gradient(ellipse 8px 5px at calc(12% - 10px) calc(78% - 12px), rgba(255, 255, 255, .45), transparent),
-        radial-gradient(circle 26px at 12% 78%, rgba(127, 243, 226, .05) 0 55%, rgba(127, 243, 226, .13) 82%, rgba(225, 255, 250, .30) 96%, transparent 100%),
-        radial-gradient(ellipse 13px 8px at calc(86% - 16px) calc(64% - 19px), rgba(255, 255, 255, .45), transparent),
-        radial-gradient(circle 42px at 86% 64%, rgba(127, 243, 226, .05) 0 55%, rgba(127, 243, 226, .13) 82%, rgba(225, 255, 250, .30) 96%, transparent 100%),
-        radial-gradient(ellipse 5px 3px at calc(70% - 6px) calc(18% - 8px), rgba(255, 255, 255, .45), transparent),
-        radial-gradient(circle 17px at 70% 18%, rgba(140, 200, 255, .05) 0 55%, rgba(140, 200, 255, .13) 82%, rgba(225, 255, 250, .30) 96%, transparent 100%),
-        radial-gradient(ellipse 4px 2px at calc(30% - 5px) calc(30% - 5px), rgba(255, 255, 255, .45), transparent),
-        radial-gradient(circle 12px at 30% 30%, rgba(127, 243, 226, .05) 0 55%, rgba(127, 243, 226, .13) 82%, rgba(225, 255, 250, .30) 96%, transparent 100%),
-        radial-gradient(ellipse 7px 4px at calc(52% - 8px) calc(88% - 9px), rgba(255, 255, 255, .45), transparent),
-        radial-gradient(circle 21px at 52% 88%, rgba(139, 220, 74, .05) 0 55%, rgba(139, 220, 74, .13) 82%, rgba(225, 255, 250, .30) 96%, transparent 100%),
-        radial-gradient(ellipse 3px 2px at calc(94% - 3px) calc(30% - 4px), rgba(255, 255, 255, .45), transparent),
-        radial-gradient(circle 9px at 94% 30%, rgba(127, 243, 226, .05) 0 55%, rgba(127, 243, 226, .13) 82%, rgba(225, 255, 250, .30) 96%, transparent 100%);
+        linear-gradient(125deg, transparent 55%, rgba(120, 170, 255, .06) 62%, transparent 70%);
+}
+
+.burbuja {
+    position: absolute;
+    bottom: -100px;
+    left: var(--x);
+    width: var(--d);
+    height: var(--d);
+    border-radius: 50%;
+    background: var(--burbuja);
+    will-change: transform;
+    animation:
+        subir var(--t) linear var(--retraso) infinite,
+        vaiven calc(var(--t) / 5) ease-in-out var(--retraso) infinite alternate;
+}
+
+/* Bigger bubbles rise faster, as they do in water. The negative delays
+   start each one partway up, so the page is never empty. */
+.burbuja:nth-child(1) { --x: 12%; --d: 52px; --t: 44s; --retraso: -9s; --deriva: 26px; --y: 70%; }
+.burbuja:nth-child(2) { --x: 86%; --d: 84px; --t: 36s; --retraso: -21s; --deriva: 34px; --y: 58%; }
+.burbuja:nth-child(3) { --x: 70%; --d: 34px; --t: 52s; --retraso: -40s; --deriva: 18px; --y: 16%; }
+.burbuja:nth-child(4) { --x: 30%; --d: 24px; --t: 58s; --retraso: -27s; --deriva: 14px; --y: 28%; }
+.burbuja:nth-child(5) { --x: 52%; --d: 42px; --t: 48s; --retraso: -3s; --deriva: 22px; --y: 84%; }
+.burbuja:nth-child(6) { --x: 94%; --d: 18px; --t: 64s; --retraso: -50s; --deriva: 10px; --y: 28%; }
+.burbuja:nth-child(7) { --x: 4%; --d: 30px; --t: 55s; --retraso: -36s; --deriva: 16px; --y: 40%; }
+.burbuja:nth-child(8) { --x: 40%; --d: 64px; --t: 40s; --retraso: -31s; --deriva: 30px; --y: 50%; }
+
+@keyframes subir {
+    from { transform: translate3d(0, 0, 0); }
+    to { transform: translate3d(0, calc(-100vh - 200px), 0); }
+}
+
+@keyframes vaiven {
+    from { translate: calc(var(--deriva) * -1) 0; }
+    to { translate: var(--deriva) 0; }
 }
 
 ::selection {
@@ -112,9 +151,9 @@ h1, h2, h3 {
 /* ---------- glass ---------- */
 
 .cristal {
-    background: var(--cristal);
+    background: var(--brillo), var(--cristal);
     border: 1px solid var(--cristal-borde);
-    border-radius: 12px;
+    border-radius: 16px;
     box-shadow: var(--cristal-brillo), var(--sombra);
     -webkit-backdrop-filter: blur(16px) saturate(150%);
     backdrop-filter: blur(16px) saturate(150%);
@@ -273,6 +312,23 @@ h1, h2, h3 {
     filter: drop-shadow(0 4px 18px rgba(46, 230, 207, .35));
 }
 
+/* The wordmark again, upside down and fading, as if on a glass floor. */
+.portada-reflejo {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    height: .42em;
+    overflow: hidden;
+    font-size: clamp(3rem, 10vw, 5rem);
+    font-weight: 800;
+    letter-spacing: -.03em;
+    line-height: 1;
+    transform: scaleY(-1);
+    opacity: .3;
+    -webkit-mask-image: linear-gradient(to top, #000, transparent 90%);
+    mask-image: linear-gradient(to top, #000, transparent 90%);
+}
+
 .portada-lema {
     margin: .3rem 0 1.8rem;
     color: var(--tenue);
@@ -295,9 +351,56 @@ h1, h2, h3 {
     border-bottom: 1px solid var(--cristal-borde);
 }
 
-.texto li { margin: .35rem 0; }
+/* List bullets are small glossy drawings, one kind per section: info orbs
+   by default, ticks for the features, a scroll for the licences, and each
+   artwork credit shows the drawing it credits. */
+.texto li {
+    margin: .45rem 0;
+    padding-left: 1.5em;
+    list-style: none;
+    background: url("/static/arte/info.svg") .1em .3em / 1.05em 1.05em no-repeat;
+}
+
+.texto ul { padding-left: .4em; }
+
+.texto-icono {
+    float: right;
+    width: 84px;
+    margin: 0 0 .5rem 1rem;
+    filter: drop-shadow(0 6px 12px rgba(0, 0, 0, .45));
+}
 
 .aviso { text-align: center; }
+
+.aviso-icono {
+    width: 130px;
+    margin-top: .5rem;
+    filter: drop-shadow(0 8px 18px rgba(46, 230, 207, .3));
+    will-change: transform;
+    animation: mecerse 14s ease-in-out infinite;
+}
+
+.texto .lista-ok li { background-image: url("/static/arte/check.svg"); }
+
+.texto .lista-licencias li { background-image: url("/static/arte/pergamino.svg"); }
+
+.texto .dibujo-mariposas { background-image: url("/static/arte/mariposa-1.svg"); }
+
+.texto .dibujo-pez-dorado { background-image: url("/static/arte/pez-dorado.svg"); }
+
+.texto .dibujo-pez-angel { background-image: url("/static/arte/pez-angel.svg"); }
+
+.texto .dibujo-brotes { background-image: url("/static/arte/brote.svg"); }
+
+.texto .dibujo-check { background-image: url("/static/arte/check.svg"); }
+
+.texto .dibujo-info { background-image: url("/static/arte/info.svg"); }
+
+.texto .dibujo-pergamino { background-image: url("/static/arte/pergamino.svg"); }
+
+.texto .dibujo-tierra-reciclaje { background-image: url("/static/arte/tierra-reciclaje.svg"); }
+
+.texto .dibujo-tierra { background-image: url("/static/arte/tierra.svg"); }
 
 /* ---------- footer ---------- */
 
@@ -314,6 +417,166 @@ h1, h2, h3 {
 
 .pie p { margin: .25rem 0; }
 
+/* ---------- home page scene ---------- */
+
+/* The hills sit on top of the footer, and on the home page the footer is
+   the water: wherever the footer ends up, the scene stays in one piece. */
+.inicio .pie {
+    position: relative;
+    background:
+        radial-gradient(ellipse 30% 8px at 25% 30%, rgba(232, 255, 249, .35), transparent),
+        radial-gradient(ellipse 22% 6px at 70% 62%, rgba(232, 255, 249, .25), transparent),
+        linear-gradient(180deg, rgba(46, 230, 207, .38), rgba(10, 91, 107, .6) 35%, rgba(3, 20, 31, .95));
+    border-top: 1px solid rgba(200, 255, 138, .45);
+}
+
+.inicio .pie::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 100%;
+    height: clamp(110px, 24vh, 230px);
+    pointer-events: none;
+    background: url("/static/arte/paisaje.svg") center bottom / cover no-repeat;
+}
+
+.escena {
+    position: relative;
+    max-width: 1000px;
+    height: 0;
+    margin: 0 auto;
+}
+
+.mariposa {
+    position: absolute;
+    filter: drop-shadow(0 8px 10px rgba(0, 0, 0, .55));
+    will-change: transform;
+    animation: aleteo 1.8s ease-in-out infinite, flotar 7s ease-in-out infinite alternate;
+}
+
+.mariposa-a { width: 130px; left: -110px; top: 30px; rotate: -16deg; }
+
+.mariposa-b {
+    width: 90px;
+    right: -70px;
+    top: 250px;
+    rotate: 18deg;
+    animation-duration: 1.5s, 9s;
+    animation-delay: -.6s, -3s;
+}
+
+.pecera {
+    position: absolute;
+    left: -40px;
+    top: 340px;
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background:
+        radial-gradient(ellipse 22% 13% at 32% 24%, rgba(255, 255, 255, .7), transparent),
+        radial-gradient(circle, rgba(127, 243, 226, .07) 0 58%, rgba(127, 243, 226, .2) 82%, rgba(225, 255, 250, .5) 96%, transparent 100%);
+    box-shadow: 0 0 30px rgba(46, 230, 207, .25);
+    will-change: transform;
+    animation: deriva 18s ease-in-out infinite;
+}
+
+/* The goldfish swims from side to side inside its bubble and turns round
+   at each end: rotateY shows the turn instead of a sudden flip. */
+.pecera img {
+    width: 64%;
+    filter: drop-shadow(0 3px 6px rgba(0, 0, 0, .4));
+    will-change: transform;
+    animation: dar-vueltas 13s ease-in-out infinite;
+}
+
+/* An angelfish crosses the page now and then, behind the glass, so the
+   frosted card blurs it on its way past. */
+.viajero {
+    position: absolute;
+    top: 27vh;
+    left: 0;
+    width: 96px;
+    will-change: transform;
+    animation: travesia 80s linear -14s infinite;
+}
+
+.viajero img {
+    display: block;
+    width: 100%;
+    filter: drop-shadow(0 6px 10px rgba(0, 0, 0, .45));
+    will-change: transform;
+    animation: ondular 6s ease-in-out infinite alternate, coletear 2.4s ease-in-out infinite alternate;
+}
+
+@keyframes aleteo {
+    0%, 100% { scale: 1 1; }
+    50% { scale: .8 1; }
+}
+
+@keyframes flotar {
+    from { translate: 0 0; }
+    to { translate: 12px -10px; }
+}
+
+@keyframes deriva {
+    0%, 100% { translate: 0 0; }
+    25% { translate: 16px -12px; }
+    50% { translate: 6px -26px; }
+    75% { translate: -12px -10px; }
+}
+
+@keyframes dar-vueltas {
+    0%, 100% { transform: translateX(-14%) rotateY(180deg); }
+    42% { transform: translateX(14%) rotateY(180deg); }
+    50% { transform: translateX(14%) rotateY(0deg); }
+    92% { transform: translateX(-14%) rotateY(0deg); }
+}
+
+/* Out to the right, a pause off screen to turn round, back to the left a
+   little higher, and another pause. The lane runs between the butterflies
+   and the goldfish's bubble. */
+@keyframes travesia {
+    0% { transform: translate3d(-130px, 0, 0) rotateY(0deg); }
+    44% { transform: translate3d(calc(100vw + 30px), 2vh, 0) rotateY(0deg); }
+    50% { transform: translate3d(calc(100vw + 30px), -3vh, 0) rotateY(180deg); }
+    94% { transform: translate3d(-130px, -1vh, 0) rotateY(180deg); }
+    100% { transform: translate3d(-130px, 0, 0) rotateY(0deg); }
+}
+
+@keyframes ondular {
+    from { translate: 0 -10px; }
+    to { translate: 0 10px; }
+}
+
+@keyframes coletear {
+    from { rotate: -3deg; }
+    to { rotate: 3deg; }
+}
+
+@keyframes mecerse {
+    0%, 100% { transform: translate3d(0, 0, 0) rotate(-3deg); }
+    50% { transform: translate3d(0, -14px, 0) rotate(3deg); }
+}
+
+/* Without motion the bubbles stay where they are, and the angelfish, which
+   would only be swimming in place, is left out. */
+@media (prefers-reduced-motion: reduce) {
+    .burbuja {
+        top: var(--y);
+        bottom: auto;
+        animation: none;
+    }
+
+    .viajero { display: none; }
+
+    .mariposa, .pecera, .pecera img, .aviso-icono { animation: none; }
+
+    .pecera img { transform: scaleX(-1); }
+}
+
 /* ---------- small screens ---------- */
 
 @media (max-width: 640px) {
@@ -328,6 +591,14 @@ h1, h2, h3 {
     }
 
     .portada { padding: 2rem 1.2rem; }
+
+    .mariposa-a { width: 80px; left: 4px; top: -26px; }
+
+    .mariposa-b { width: 60px; right: 24px; top: 350px; }
+
+    .pecera { left: 10px; top: 360px; width: 92px; height: 92px; }
+
+    .texto-icono { width: 60px; }
 
     .texto, .aviso { padding: 1.2rem 1.2rem 1.5rem; }
 }

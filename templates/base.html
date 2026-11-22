@@ -10,8 +10,12 @@
     <link rel="icon" href="{{ estatico "favicon.svg" }}" type="image/svg+xml">
     <link rel="stylesheet" href="{{ estatico "estilo.css" }}">
 </head>
-<body>
-    <div class="burbujas" aria-hidden="true"></div>
+<body{{ if .Inicio }} class="inicio"{{ end }}>
+    <div class="burbujas" aria-hidden="true">
+        <span class="burbuja"></span><span class="burbuja"></span><span class="burbuja"></span><span class="burbuja"></span>
+        <span class="burbuja"></span><span class="burbuja"></span><span class="burbuja"></span><span class="burbuja"></span>
+        {{ if .Inicio }}<span class="viajero"><img src="{{ estatico "arte/pez-angel.svg" }}" alt=""></span>{{ end }}
+    </div>
 
     <header class="cabecera">
         <div class="cabecera-interior">

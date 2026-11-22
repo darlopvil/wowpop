@@ -1,6 +1,12 @@
 {{ define "contenido" }}
+<div class="escena" aria-hidden="true">
+    <img class="mariposa mariposa-a" src="{{ estatico "arte/mariposa-1.svg" }}" alt="">
+    <img class="mariposa mariposa-b" src="{{ estatico "arte/mariposa-2.svg" }}" alt="">
+    <div class="pecera"><img src="{{ estatico "arte/pez-dorado.svg" }}" alt=""></div>
+</div>
 <section class="portada cristal">
     <h1 class="portada-marca"><span class="marca-wow">wow</span><span class="marca-pop">pop</span></h1>
+    <div class="portada-reflejo" aria-hidden="true"><span class="marca-wow">wow</span><span class="marca-pop">pop</span></div>
     <p class="portada-lema">Wallapop sin rastreadores, sin anuncios y sin JavaScript.</p>
     <form class="buscador buscador-grande" action="/search" method="get" role="search">
         <input type="search" name="keywords" placeholder="¿Qué estás buscando?" aria-label="Buscar en Wallapop" required autofocus>

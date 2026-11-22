@@ -2,11 +2,14 @@ package main
 
 import (
 	"bytes"
+	"compress/gzip"
 	"crypto/sha256"
 	"encoding/hex"
 	"io/fs"
+	"mime"
 	"net/http"
 	"path"
+	"strings"
 	"time"
 )
 
@@ -17,15 +20,27 @@ import (
 // the link. Without it (an old page, /favicon.ico, the licence links) the
 // file is still served, but the browser has to check first with its ETag,
 // so it never keeps a stale copy.
+//
+// Text files (styles, drawings, licences) are also kept gzipped, compressed
+// once at start-up, and sent that way to browsers that accept it.
 
 type archivoEstatico struct {
 	contenido []byte
-	version   string
+	// gz is the gzipped content, nil when compressing does not pay off.
+	gz      []byte
+	version string
 }
 
 // Types Go does not know without a system mime table, which the scratch
 // image does not have.
-var tiposEstaticos = map[string]string{".woff2": "font/woff2"}
+var tiposEstaticos = map[string]string{
+	".woff2": "font/woff2",
+	".txt":   "text/plain; charset=utf-8",
+}
+
+// comprimibles are the extensions worth gzipping: woff2 is already
+// compressed.
+var comprimibles = map[string]bool{".css": true, ".svg": true, ".txt": true}
 
 var estaticos = cargarEstaticos()
 
@@ -54,7 +69,41 @@ func cargarEstaticos() map[string]archivoEstatico {
 	}
 	css.version = versionDe(css.contenido)
 	m[hoja] = css
+
+	for ruta, a := range m {
+		if comprimibles[path.Ext(ruta)] {
+			a.gz = comprimir(a.contenido)
+			m[ruta] = a
+		}
+	}
 	return m
+}
+
+// comprimir gzips b, or returns nil when that does not make it smaller.
+func comprimir(b []byte) []byte {
+	var buf bytes.Buffer
+	w, err := gzip.NewWriterLevel(&buf, gzip.BestCompression)
+	if err != nil {
+		panic(err) // a fixed, valid level: only a broken build gets here
+	}
+	_, _ = w.Write(b)
+	_ = w.Close()
+	if buf.Len() >= len(b) {
+		return nil
+	}
+	return buf.Bytes()
+}
+
+// aceptaGzip tells whether the request's Accept-Encoding allows gzip.
+func aceptaGzip(r *http.Request) bool {
+	for _, parte := range strings.Split(r.Header.Get("Accept-Encoding"), ",") {
+		nombre, parametros, _ := strings.Cut(strings.TrimSpace(parte), ";")
+		if strings.TrimSpace(nombre) != "gzip" {
+			continue
+		}
+		return strings.ReplaceAll(strings.TrimSpace(parametros), " ", "") != "q=0"
+	}
+	return false
 }
 
 func versionDe(b []byte) string {
@@ -84,11 +133,26 @@ func paginaEstatico(w http.ResponseWriter, r *http.Request) {
 	} else {
 		c.Set("Cache-Control", "no-cache")
 	}
-	c.Set("ETag", `"`+a.version+`"`)
-	if t, ok := tiposEstaticos[path.Ext(r.URL.Path)]; ok {
-		c.Set("Content-Type", t)
+	// Set the type here: ServeContent would otherwise sniff it from the
+	// body, which may be gzipped.
+	ext := path.Ext(r.URL.Path)
+	tipo, ok := tiposEstaticos[ext]
+	if !ok {
+		tipo = mime.TypeByExtension(ext)
 	}
-	// ServeContent answers If-None-Match with a 304 and sets the content
-	// type of everything else from the extension.
-	http.ServeContent(w, r, path.Base(r.URL.Path), time.Time{}, bytes.NewReader(a.contenido))
+	if tipo != "" {
+		c.Set("Content-Type", tipo)
+	}
+
+	cuerpo, etag := a.contenido, a.version
+	if a.gz != nil {
+		c.Add("Vary", "Accept-Encoding")
+		if aceptaGzip(r) {
+			cuerpo, etag = a.gz, a.version+"-gz"
+			c.Set("Content-Encoding", "gzip")
+		}
+	}
+	c.Set("ETag", `"`+etag+`"`)
+	// ServeContent answers If-None-Match with a 304.
+	http.ServeContent(w, r, path.Base(r.URL.Path), time.Time{}, bytes.NewReader(cuerpo))
 }

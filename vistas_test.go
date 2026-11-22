@@ -56,7 +56,7 @@ func TestAboutHasTheLegalNoticeAndLicences(t *testing.T) {
 		"aquí no se compra, no se vende ni se contacta con nadie",
 		"no guarda datos de los vendedores",
 		"Tu navegador solo se conecta a wowpop",
-		"Ligera:",
+		"Ligera:", "unos 85 KB",
 		"Frutiger Aero",
 		"GNU AGPL-3.0",
 		estatico("fuentes/OFL-OpenSans.txt"),
@@ -86,5 +86,44 @@ func TestFaviconIcoPointsToTheSVG(t *testing.T) {
 	w := pedirRuta(t, "/favicon.ico")
 	if w.Code != http.StatusMovedPermanently || w.Header().Get("Location") != estatico("favicon.svg") {
 		t.Fatalf("got %d to %q", w.Code, w.Header().Get("Location"))
+	}
+}
+
+func TestHomePageHasTheNatureScene(t *testing.T) {
+	html := pedirRuta(t, "/").Body.String()
+	for _, texto := range []string{`<body class="inicio">`, `class="escena" aria-hidden="true"`, estatico("arte/mariposa-1.svg"), estatico("arte/pez-dorado.svg"), estatico("arte/pez-angel.svg"), `class="portada-reflejo" aria-hidden="true"`} {
+		if !strings.Contains(html, texto) {
+			t.Errorf("home: missing %q", texto)
+		}
+	}
+	if html := pedirRuta(t, "/about").Body.String(); strings.Contains(html, `class="inicio"`) || strings.Contains(html, `class="viajero"`) {
+		t.Error("only the home page gets the scene")
+	}
+}
+
+func TestAboutCreditsTheArtwork(t *testing.T) {
+	html := pedirRuta(t, "/about").Body.String()
+	for _, id := range []string{"346015", "181437", "122389", "237408", "34723", "7982", "351206", "2213", "3320"} {
+		if !strings.Contains(html, "https://openclipart.org/detail/"+id) {
+			t.Errorf("/about does not credit Openclipart %s", id)
+		}
+	}
+}
+
+func TestEveryPageHasRisingBubbles(t *testing.T) {
+	for _, ruta := range []string{"/", "/about", "/no-existe"} {
+		if n := strings.Count(pedirRuta(t, ruta).Body.String(), `class="burbuja"`); n != 8 {
+			t.Errorf("%s: %d bubbles, the stylesheet places 8", ruta, n)
+		}
+	}
+}
+
+func TestEveryArtworkCreditShowsItsDrawing(t *testing.T) {
+	html := pedirRuta(t, "/about").Body.String()
+	css := string(estaticos["/static/estilo.css"].contenido)
+	for _, clase := range []string{"mariposas", "pez-dorado", "pez-angel", "brotes", "check", "info", "pergamino", "tierra-reciclaje", "tierra"} {
+		if !strings.Contains(html, `<li class="dibujo-`+clase+`">`) || !strings.Contains(css, ".dibujo-"+clase+" {") {
+			t.Errorf("credit %q has no drawing for its bullet", clase)
+		}
 	}
 }

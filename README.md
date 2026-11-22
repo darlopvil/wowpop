@@ -15,9 +15,10 @@ use. No public instance is offered. Issues are welcome.
 - No accounts, no cookies and no trackers.
 - Wallapop receives no identifier of your device: no cookies, no device id,
   no app version.
-- Lightweight: the first visit downloads about 60 KB in all, most of it the
-  font. After that a page is a few KB, because styles and the font stay in
-  the browser for a year.
+- Lightweight: the first visit downloads about 85 KB in all, more than half
+  of it the font. After that a page is a few KB, because styles, drawings
+  and the font stay in the browser for a year. Styles and drawings are sent
+  gzipped, compressed once when wowpop starts.
 - A dark Frutiger Aero look, in the spirit of Windows Vista and 7.
 
 The interface is in Spanish, like the Wallapop website it mirrors.
@@ -165,3 +166,23 @@ kind. See [LICENSE](LICENSE).
 
 The Open Sans font is © The Open Sans Project Authors and is licensed under
 the SIL Open Font License 1.1 ([static/fuentes/OFL-OpenSans.txt](static/fuentes/OFL-OpenSans.txt)).
+
+The hill, the aurora ribbons and the bubbles were drawn for wowpop and are
+under the AGPL like the rest of the code. The other drawings come from
+[Openclipart](https://openclipart.org/) and are in the public domain (CC0);
+thanks to their authors all the same:
+
+| File | Drawing | Author |
+|---|---|---|
+| `static/arte/mariposa-1.svg`, `mariposa-2.svg` | [Five Butterflies](https://openclipart.org/detail/346015) | j4p4n |
+| `static/arte/pez-dorado.svg` | [Fish icons](https://openclipart.org/detail/181437) | vectorsme |
+| `static/arte/pez-angel.svg` | [Angel Fish](https://openclipart.org/detail/122389) | cgillis73 |
+| `static/arte/brote.svg`, and the sprouts in `paisaje.svg` | [Green Leaves Graphics](https://openclipart.org/detail/237408) | GoodFreeArt |
+| `static/arte/info.svg` | [Small blue 'i' info button](https://openclipart.org/detail/7982) | TzeenieWheenie |
+| `static/arte/pergamino.svg` | [Blank Scroll](https://openclipart.org/detail/351206) | j4p4n |
+| `static/arte/check.svg` | [tasto 7](https://openclipart.org/detail/34723) | francesco_rollandin |
+| `static/arte/tierra-reciclaje.svg` | [crystal earth recycle](https://openclipart.org/detail/2213) | kuba |
+| `static/arte/tierra.svg` | [Earth](https://openclipart.org/detail/3320) | barretr |
+
+They were cleaned up for the web (metadata and editor data removed, shadows
+dropped from the butterflies, paths simplified), which CC0 allows.
