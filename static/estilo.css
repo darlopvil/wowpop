@@ -1,0 +1,333 @@
+/* Open Sans: SIL Open Font License 1.1, next to the font in /static/fuentes/.
+   One variable file covers every weight. Its designer, Steve Matteson, also
+   drew Segoe UI, the typeface of Windows Vista and 7. */
+@font-face {
+    font-family: "Open Sans";
+    src: url("/static/fuentes/open-sans.woff2") format("woff2");
+    font-weight: 300 800;
+    font-display: swap;
+}
+
+:root {
+    color-scheme: dark;
+
+    /* Night aurora behind everything */
+    --noche: #030b16;
+    --abismo: #06192b;
+    --marea: #0a3346;
+
+    /* Wallapop's aqua, and the glossy shades around it */
+    --aqua: #13c1ac;
+    --aqua-claro: #7ff3e2;
+    --aqua-vivo: #2ee6cf;
+    --aqua-oscuro: #0a7f71;
+
+    /* Frutiger "eco" green for good news */
+    --hoja: #8bdc4a;
+
+    --texto: #e8f6f8;
+    --tenue: #8fb1bb;
+
+    /* Dark glass */
+    --cristal: linear-gradient(180deg, rgba(255, 255, 255, .13) 0%, rgba(255, 255, 255, .05) 48%, rgba(255, 255, 255, .025) 52%, rgba(255, 255, 255, .06) 100%);
+    --cristal-borde: rgba(190, 240, 255, .22);
+    --cristal-brillo: inset 0 1px 0 rgba(255, 255, 255, .32), inset 0 0 0 1px rgba(255, 255, 255, .04);
+    --sombra: 0 10px 34px rgba(0, 0, 0, .5);
+
+    --letra: "Open Sans", "Segoe UI", system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+/* The aurora sits on <html>, not <body>: that way the bubbles layer, at
+   z-index -1, is drawn above it and below everything else. */
+html {
+    min-height: 100%;
+    background:
+        radial-gradient(120% 70% at 15% -10%, rgba(19, 193, 172, .30), transparent 60%),
+        radial-gradient(90% 60% at 100% 10%, rgba(46, 120, 230, .22), transparent 65%),
+        radial-gradient(80% 50% at 50% 115%, rgba(139, 220, 74, .12), transparent 70%),
+        linear-gradient(170deg, var(--marea) 0%, var(--abismo) 45%, var(--noche) 100%);
+    background-attachment: fixed;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font: 16px/1.55 var(--letra);
+    color: var(--texto);
+}
+
+/* Light streaks and bubbles, drawn in CSS: nothing to download. */
+.burbujas {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+        linear-gradient(115deg, transparent 38%, rgba(127, 243, 226, .08) 46%, transparent 54%),
+        linear-gradient(125deg, transparent 55%, rgba(120, 170, 255, .06) 62%, transparent 70%),
+        radial-gradient(ellipse 8px 5px at calc(12% - 10px) calc(78% - 12px), rgba(255, 255, 255, .45), transparent),
+        radial-gradient(circle 26px at 12% 78%, rgba(127, 243, 226, .05) 0 55%, rgba(127, 243, 226, .13) 82%, rgba(225, 255, 250, .30) 96%, transparent 100%),
+        radial-gradient(ellipse 13px 8px at calc(86% - 16px) calc(64% - 19px), rgba(255, 255, 255, .45), transparent),
+        radial-gradient(circle 42px at 86% 64%, rgba(127, 243, 226, .05) 0 55%, rgba(127, 243, 226, .13) 82%, rgba(225, 255, 250, .30) 96%, transparent 100%),
+        radial-gradient(ellipse 5px 3px at calc(70% - 6px) calc(18% - 8px), rgba(255, 255, 255, .45), transparent),
+        radial-gradient(circle 17px at 70% 18%, rgba(140, 200, 255, .05) 0 55%, rgba(140, 200, 255, .13) 82%, rgba(225, 255, 250, .30) 96%, transparent 100%),
+        radial-gradient(ellipse 4px 2px at calc(30% - 5px) calc(30% - 5px), rgba(255, 255, 255, .45), transparent),
+        radial-gradient(circle 12px at 30% 30%, rgba(127, 243, 226, .05) 0 55%, rgba(127, 243, 226, .13) 82%, rgba(225, 255, 250, .30) 96%, transparent 100%),
+        radial-gradient(ellipse 7px 4px at calc(52% - 8px) calc(88% - 9px), rgba(255, 255, 255, .45), transparent),
+        radial-gradient(circle 21px at 52% 88%, rgba(139, 220, 74, .05) 0 55%, rgba(139, 220, 74, .13) 82%, rgba(225, 255, 250, .30) 96%, transparent 100%),
+        radial-gradient(ellipse 3px 2px at calc(94% - 3px) calc(30% - 4px), rgba(255, 255, 255, .45), transparent),
+        radial-gradient(circle 9px at 94% 30%, rgba(127, 243, 226, .05) 0 55%, rgba(127, 243, 226, .13) 82%, rgba(225, 255, 250, .30) 96%, transparent 100%);
+}
+
+::selection {
+    color: var(--noche);
+    background: var(--aqua-claro);
+}
+
+a {
+    color: var(--aqua-claro);
+    text-underline-offset: 3px;
+}
+
+a:hover { color: #fff; }
+
+:focus-visible {
+    outline: 2px solid var(--aqua-claro);
+    outline-offset: 2px;
+    border-radius: 6px;
+}
+
+.tenue { color: var(--tenue); }
+
+h1, h2, h3 {
+    line-height: 1.2;
+    font-weight: 600;
+    text-shadow: 0 1px 12px rgba(46, 230, 207, .25);
+}
+
+/* ---------- glass ---------- */
+
+.cristal {
+    background: var(--cristal);
+    border: 1px solid var(--cristal-borde);
+    border-radius: 12px;
+    box-shadow: var(--cristal-brillo), var(--sombra);
+    -webkit-backdrop-filter: blur(16px) saturate(150%);
+    backdrop-filter: blur(16px) saturate(150%);
+}
+
+/* Without blur, or for those who ask for less transparency, the glass gets
+   solid enough to read on. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .cristal, .cabecera, .pie { background-color: rgba(6, 25, 43, .92); }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+    .cristal, .cabecera, .pie {
+        background: var(--abismo);
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
+    }
+}
+
+/* ---------- glossy buttons ---------- */
+
+.boton {
+    display: inline-block;
+    padding: .5em 1.4em;
+    border: 1px solid var(--aqua-oscuro);
+    border-radius: 999px;
+    font: 600 1rem var(--letra);
+    color: #022a25;
+    text-decoration: none;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, .45);
+    cursor: pointer;
+    background: linear-gradient(180deg, var(--aqua-claro) 0%, var(--aqua-vivo) 48%, var(--aqua) 52%, #19d3bc 100%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .75), inset 0 -2px 6px rgba(0, 80, 70, .35), 0 2px 8px rgba(0, 0, 0, .4);
+    transition: box-shadow .15s, filter .15s;
+}
+
+.boton:hover {
+    color: #022a25;
+    filter: brightness(1.08);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .8), inset 0 -2px 6px rgba(0, 80, 70, .3), 0 0 16px rgba(46, 230, 207, .65);
+}
+
+.boton:active {
+    filter: brightness(.95);
+    box-shadow: inset 0 2px 6px rgba(0, 60, 52, .55);
+}
+
+/* ---------- header ---------- */
+
+.cabecera {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: linear-gradient(180deg, rgba(255, 255, 255, .14), rgba(255, 255, 255, .04) 50%, rgba(0, 0, 0, .12) 51%, rgba(0, 0, 0, .05));
+    border-bottom: 1px solid var(--cristal-borde);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .25), 0 4px 20px rgba(0, 0, 0, .45);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    backdrop-filter: blur(18px) saturate(160%);
+}
+
+.cabecera-interior {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: .6rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+}
+
+.marca {
+    font-size: 1.7rem;
+    font-weight: 800;
+    letter-spacing: -.02em;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.marca-wow, .marca-pop {
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+.marca-wow { background-image: linear-gradient(180deg, #ffffff 0%, #d5fbff 48%, #8fe7f2 52%, #c4f5ff 100%); }
+
+.marca-pop { background-image: linear-gradient(180deg, var(--aqua-claro) 0%, var(--aqua-vivo) 48%, var(--aqua) 52%, var(--aqua-claro) 100%); }
+
+.menu { margin-left: auto; }
+
+.menu a {
+    color: var(--texto);
+    text-decoration: none;
+    padding: .35em .9em;
+    border-radius: 999px;
+    border: 1px solid transparent;
+}
+
+.menu a:hover {
+    border-color: var(--cristal-borde);
+    background: rgba(255, 255, 255, .08);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .2);
+}
+
+/* ---------- search box ---------- */
+
+.buscador {
+    flex: 1;
+    display: flex;
+    gap: .5rem;
+    max-width: 640px;
+}
+
+.buscador input {
+    flex: 1;
+    min-width: 0;
+    padding: .55em 1.1em;
+    border-radius: 999px;
+    border: 1px solid var(--cristal-borde);
+    font: 1rem var(--letra);
+    color: var(--texto);
+    background: linear-gradient(180deg, rgba(0, 0, 0, .35), rgba(0, 0, 0, .18));
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, .5), 0 1px 0 rgba(255, 255, 255, .12);
+}
+
+.buscador input::placeholder { color: var(--tenue); }
+
+.buscador input:focus {
+    outline: none;
+    border-color: var(--aqua);
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, .5), 0 0 0 3px rgba(46, 230, 207, .25), 0 0 18px rgba(46, 230, 207, .35);
+}
+
+/* ---------- content ---------- */
+
+.contenido {
+    flex: 1;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem 3rem;
+}
+
+.portada {
+    max-width: 760px;
+    margin: 8vh auto 0;
+    padding: 2.5rem 2rem 2.8rem;
+    text-align: center;
+}
+
+.portada-marca {
+    margin: 0;
+    font-size: clamp(3rem, 10vw, 5rem);
+    font-weight: 800;
+    letter-spacing: -.03em;
+    text-shadow: none;
+    filter: drop-shadow(0 4px 18px rgba(46, 230, 207, .35));
+}
+
+.portada-lema {
+    margin: .3rem 0 1.8rem;
+    color: var(--tenue);
+}
+
+.buscador-grande {
+    max-width: none;
+    font-size: 1.15rem;
+}
+
+.texto, .aviso {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 1.5rem 2rem 2rem;
+}
+
+.texto h2 {
+    margin-top: 2rem;
+    padding-bottom: .3rem;
+    border-bottom: 1px solid var(--cristal-borde);
+}
+
+.texto li { margin: .35rem 0; }
+
+.aviso { text-align: center; }
+
+/* ---------- footer ---------- */
+
+.pie {
+    padding: 1rem;
+    text-align: center;
+    font-size: .9rem;
+    background: linear-gradient(180deg, rgba(255, 255, 255, .06), rgba(0, 0, 0, .15));
+    border-top: 1px solid var(--cristal-borde);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .15);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+}
+
+.pie p { margin: .25rem 0; }
+
+/* ---------- small screens ---------- */
+
+@media (max-width: 640px) {
+    .cabecera-interior {
+        flex-wrap: wrap;
+        gap: .6rem 1rem;
+    }
+
+    .buscador {
+        order: 3;
+        flex-basis: 100%;
+    }
+
+    .portada { padding: 2rem 1.2rem; }
+
+    .texto, .aviso { padding: 1.2rem 1.2rem 1.5rem; }
+}

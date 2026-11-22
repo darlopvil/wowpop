@@ -1,0 +1,29 @@
+# Example deployment. Copy to docker-compose.yml and adapt it.
+#
+# The service publishes no ports: it assumes a reverse proxy that reaches it
+# by container name. The proxy network cannot be "internal", because the
+# container needs outbound access to Wallapop.
+
+services:
+  wowpop_app:
+    build: .
+    image: wowpop:local
+    container_name: wowpop_app
+    restart: unless-stopped
+    environment:
+      GOMEMLIMIT: 32MiB
+    mem_limit: 64m
+    # wowpop writes nothing to disk.
+    read_only: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    # ports:
+    #   - "127.0.0.1:8080:8080"
+    networks:
+      - proxy_network
+
+networks:
+  proxy_network:
+    external: true

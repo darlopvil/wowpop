@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="referrer" content="no-referrer">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="color-scheme" content="dark">
+    <title>{{ if .Titulo }}{{ .Titulo }} · {{ end }}wowpop</title>
+    <link rel="icon" href="{{ estatico "favicon.svg" }}" type="image/svg+xml">
+    <link rel="stylesheet" href="{{ estatico "estilo.css" }}">
+</head>
+<body>
+    <div class="burbujas" aria-hidden="true"></div>
+
+    <header class="cabecera">
+        <div class="cabecera-interior">
+            <a class="marca" href="/" aria-label="wowpop, portada"><span class="marca-wow">wow</span><span class="marca-pop">pop</span></a>
+            {{ if not .Inicio }}
+            <form class="buscador" action="/search" method="get" role="search">
+                <input type="search" name="keywords" value="{{ .Consulta }}" placeholder="Buscar en Wallapop" aria-label="Buscar en Wallapop" required>
+                <button class="boton" type="submit">Buscar</button>
+            </form>
+            {{ end }}
+            <nav class="menu">
+                <a href="/about">Acerca de</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="contenido">
+        {{ template "contenido" . }}
+    </main>
+
+    <footer class="pie">
+        <p>
+            <a href="https://github.com/darlopvil/wowpop">Código fuente</a>
+            · AGPL-3.0
+            · <a href="/about#aviso-legal">Aviso legal</a>
+        </p>
+        <p class="tenue">Web de uso privado. Proyecto independiente, sin relación con Wallapop.</p>
+    </footer>
+</body>
+</html>
