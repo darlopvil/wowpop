@@ -1,0 +1,39 @@
+{{/* Pieces shared by the search results and a seller's items. */}}
+
+{{/* tarjetas: a grid of cards, from a list of tarjeta. */}}
+{{ define "tarjetas" }}
+<ul class="resultados">
+    {{ range . }}
+    <li>
+        <a class="tarjeta{{ if .Reservado }} tarjeta-reservada{{ end }}"{{ if .Enlace }} href="{{ .Enlace }}" target="_blank" rel="noopener"{{ end }}>
+            <span class="tarjeta-foto">
+                {{ if .Foto }}<img src="{{ .Foto }}" alt="" width="320" height="320" loading="lazy">{{ end }}
+                {{ if or .Reservado .Envio .Garantia .Destacado }}
+                <span class="chapas">
+                    {{ if .Reservado }}<span class="chapa chapa-reservado">Reservado</span>{{ end }}
+                    {{ if .Envio }}<span class="chapa chapa-envio">Envío</span>{{ end }}
+                    {{ if .Garantia }}<span class="chapa chapa-garantia">Garantía</span>{{ end }}
+                    {{ if .Destacado }}<span class="chapa chapa-destacado">Destacado</span>{{ end }}
+                </span>
+                {{ end }}
+            </span>
+            <span class="tarjeta-precio">{{ .Precio }}</span>
+            <span class="tarjeta-titulo">{{ .Titulo }}</span>
+            {{ if .Ciudad }}<span class="tarjeta-lugar">{{ .Ciudad }}</span>{{ end }}
+        </a>
+    </li>
+    {{ end }}
+</ul>
+{{ end }}
+
+{{/* paginas: the page links, from a Paginacion. */}}
+{{ define "paginas" }}
+{{ if .Paginas }}
+<nav class="paginas" aria-label="Páginas">
+    {{ with .Anterior }}<a class="orden" href="{{ . }}" rel="prev">‹ Anterior</a>{{ end }}
+    {{ range .Paginas }}{{ if .Hueco }}<span class="paginas-hueco">…</span>{{ else if .Activa }}<span class="orden orden-activa" aria-current="page">{{ .Numero }}</span>{{ else }}<a class="orden" href="{{ .Enlace }}">{{ .Numero }}</a>{{ end }}
+    {{ end }}
+    {{ with .Siguiente }}<a class="boton" href="{{ . }}" rel="next">Siguiente ›</a>{{ end }}
+</nav>
+{{ end }}
+{{ end }}

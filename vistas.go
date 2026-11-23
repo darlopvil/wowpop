@@ -20,6 +20,8 @@ type datosPagina struct {
 	Resultados *resultadosBusqueda
 	// Ficha is a listing.
 	Ficha *ficha
+	// Perfil is a seller and a page of their items.
+	Perfil *perfil
 	// Volver, on an error page, links a fresh copy of what failed instead
 	// of the home page.
 	Volver string
@@ -29,10 +31,11 @@ var funciones = template.FuncMap{
 	"estatico": estatico,
 }
 
-// Each page is parsed into its own set together with the base template,
-// because every page defines the same "contenido" block.
+// Each page is parsed into its own set together with the base template and
+// the shared pieces (tarjetas.html), because every page defines the same
+// "contenido" block.
 func cargarPlantilla(pagina string) *template.Template {
-	archivos := []string{"templates/base.html", "templates/" + pagina + ".html"}
+	archivos := []string{"templates/base.html", "templates/tarjetas.html", "templates/" + pagina + ".html"}
 	return template.Must(template.New("base.html").Funcs(funciones).ParseFS(plantillasFS, archivos...))
 }
 
@@ -42,6 +45,7 @@ var plantillas = map[string]*template.Template{
 	"error":    cargarPlantilla("error"),
 	"busqueda": cargarPlantilla("busqueda"),
 	"ficha":    cargarPlantilla("ficha"),
+	"vendedor": cargarPlantilla("vendedor"),
 }
 
 // renderizar executes the template into a buffer before writing anything, so

@@ -87,6 +87,8 @@ func rutas() http.Handler {
 
 	mux.HandleFunc("/item/", paginaFicha)
 
+	mux.HandleFunc("/user/", paginaVendedor)
+
 	mux.HandleFunc("/favicon.ico", func(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, estatico("favicon.svg"), http.StatusMovedPermanently)
 	})

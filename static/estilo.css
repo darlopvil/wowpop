@@ -862,6 +862,44 @@ a.vendedor:hover { color: #fff; }
     overflow-wrap: anywhere;
 }
 
+/* ---------- seller ---------- */
+
+.perfil {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.4rem;
+    margin-bottom: 1.6rem;
+    padding: 1.4rem 1.6rem;
+}
+
+.perfil-avatar {
+    flex: 0 0 112px;
+    width: 112px;
+    height: 112px;
+    border-radius: 50%;
+    object-fit: cover;
+    font-size: 2.6rem;
+    border: 2px solid var(--cristal-borde);
+    box-shadow: 0 0 22px rgba(46, 230, 207, .3);
+}
+
+.perfil-datos { min-width: 0; }
+
+.perfil-nombre {
+    margin: 0 0 .5rem;
+    font-size: 1.7rem;
+    overflow-wrap: anywhere;
+}
+
+.perfil-cifras {
+    margin: 0 0 .8rem;
+    color: var(--tenue);
+}
+
+.perfil-descripcion { margin-bottom: 1rem; }
+
+.estrella { color: #ffd166; text-shadow: 0 0 8px rgba(255, 209, 102, .5); }
+
 /* ---------- footer ---------- */
 
 .pie {
@@ -1073,6 +1111,14 @@ a.vendedor:hover { color: #fff; }
     .texto-icono { width: 60px; }
 
     .detalles { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+
+    .perfil {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .perfil .chapas-ficha { justify-content: center; }
 
     .resultados {
         grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));

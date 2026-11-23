@@ -92,8 +92,13 @@ type resultadosBusqueda struct {
 	Palabras  string
 	Ordenes   []opcionOrden
 	Articulos []tarjeta
-	// Paginas are the numbered page links, shown once there is more than
-	// one; Anterior and Siguiente are empty on the first and last pages.
+	Paginacion
+}
+
+// Paginacion is the numbered page links, shown once there is more than one;
+// Anterior and Siguiente are empty on the first and last pages. Searches and
+// sellers' items share it, and the "paginas" template.
+type Paginacion struct {
 	Paginas             []enlacePagina
 	Anterior, Siguiente string
 }
@@ -200,7 +205,7 @@ func paginaBusqueda(w http.ResponseWriter, r *http.Request) {
 	if t := datos.Meta.NextPage; t != "" && len(vista.Articulos) > 0 && tokenValido(t) {
 		total = busquedas.anotar(clave, n, t)
 	}
-	paginar(vista, palabras, orden.clave, clave, n, total)
+	vista.Paginacion = paginar(n, total, func(i int) string { return enlaceBusqueda(palabras, orden.clave, clave, i) })
 
 	titulo := "«" + palabras + "»"
 	if n > 1 {
@@ -213,26 +218,29 @@ func paginaBusqueda(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-// paginar fills in the page links: always the first and the last known
-// pages, and two on each side of the current one.
-func paginar(v *resultadosBusqueda, palabras, orden, clave string, n, total int) {
+// paginar makes the page links for page n of total known pages, enlace
+// being the address of each: always the first and the last, and two on each
+// side of the current one.
+func paginar(n, total int, enlace func(int) string) Paginacion {
+	var p Paginacion
 	if total <= 1 {
-		return
+		return p
 	}
 	if n > 1 {
-		v.Anterior = enlaceBusqueda(palabras, orden, clave, n-1)
+		p.Anterior = enlace(n - 1)
 	}
 	if n < total {
-		v.Siguiente = enlaceBusqueda(palabras, orden, clave, n+1)
+		p.Siguiente = enlace(n + 1)
 	}
 	for i := 1; i <= total; i++ {
 		switch {
 		case i == 1 || i == total || (i >= n-2 && i <= n+2):
-			v.Paginas = append(v.Paginas, enlacePagina{Numero: i, Enlace: enlaceBusqueda(palabras, orden, clave, i), Activa: i == n})
-		case len(v.Paginas) > 0 && !v.Paginas[len(v.Paginas)-1].Hueco:
-			v.Paginas = append(v.Paginas, enlacePagina{Hueco: true})
+			p.Paginas = append(p.Paginas, enlacePagina{Numero: i, Enlace: enlace(i), Activa: i == n})
+		case len(p.Paginas) > 0 && !p.Paginas[len(p.Paginas)-1].Hueco:
+			p.Paginas = append(p.Paginas, enlacePagina{Hueco: true})
 		}
 	}
+	return p
 }
 
 func resultadosCaducados(w http.ResponseWriter, palabras, orden string) {

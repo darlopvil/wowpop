@@ -87,14 +87,7 @@ type vendedorWallapop struct {
 	Location    struct {
 		City string `json:"city"`
 	} `json:"location"`
-	Stats struct {
-		Ratings struct {
-			Reviews int `json:"reviews"`
-		} `json:"ratings"`
-		Counters struct {
-			Sells int `json:"sells"`
-		} `json:"counters"`
-	} `json:"stats"`
+	Stats statsWallapop `json:"stats"`
 }
 
 // ficha is what the listing template shows.
@@ -127,9 +120,9 @@ const anchoCompleto = "W1024"
 type detalle struct{ Nombre, Valor string }
 
 type vendedorFicha struct {
-	Alias, Enlace, Avatar, Inicial, Ciudad string
-	Profesional                            bool
-	Valoraciones, Ventas                   int
+	Alias, Enlace, Avatar, Inicial, Ciudad, Nota string
+	Profesional                                  bool
+	Valoraciones, Ventas                         int
 }
 
 func paginaFicha(w http.ResponseWriter, r *http.Request) {
@@ -243,17 +236,17 @@ func nuevaFicha(a fichaWallapop, v vendedorWallapop, slug string) *ficha {
 		Avatar:       rutaFoto(v.AvatarImage, "W320"),
 		Ciudad:       v.Location.City,
 		Profesional:  strings.EqualFold(v.SellerType, "pro"),
-		Valoraciones: v.Stats.Ratings.Reviews,
+		Valoraciones: v.Stats.Counters.Reviews,
 		Ventas:       v.Stats.Counters.Sells,
+	}
+	if f.Vendedor.Valoraciones > 0 {
+		f.Vendedor.Nota = formatearNota(v.Stats.Ratings.Reviews)
 	}
 	if reSlug.MatchString(v.WebSlug) {
 		f.Vendedor.Enlace = "/user/" + v.WebSlug
 	}
 	if f.Vendedor.Avatar == "" {
-		for _, letra := range v.MicroName {
-			f.Vendedor.Inicial = strings.ToUpper(string(letra))
-			break
-		}
+		f.Vendedor.Inicial = inicial(v.MicroName)
 	}
 	return f
 }

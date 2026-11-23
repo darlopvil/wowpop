@@ -30,21 +30,22 @@ const fichaDePrueba = `{"pageProps":{"item":{
  "itemSeller":{"id":"ejk4rqmr79zx","microName":"PhoneLab Store V.","webSlug":"chollop-474861123","registerDate":1767869956000,
   "avatarImage":"https://cdn.wallapop.com/images/13/7u/px/__/c13p474861123/i3621427126.jpg?pictureSize=W320",
   "location":{"city":"Móstoles","zip":"28930","approxRadius":1,"coordinates":{"latitude":40.3281,"longitude":-3.8746}},
-  "sellerType":"PRO","gender":"M","stats":{"ratings":{"reviews":100},"counters":{"publish":10,"buys":2,"sells":23}}}}}`
+  "sellerType":"PRO","gender":"M","stats":{"ratings":{"reviews":96},"counters":{"publish":10,"buys":2,"sells":23,"reviews":17}}}}}`
 
-// webDePrueba is a fake es.wallapop.com: item pages carry the current build
-// in their HTML, and data URLs only answer for that build. It counts the
+// webDePrueba is a fake es.wallapop.com: item and user pages carry the
+// current build in their HTML, and data URLs only answer for that build:
+// datos for the test listing, perfil for the test seller. It counts the
 // requests of each kind.
 type webDePrueba struct {
-	build, datos string
-	estadoPagina int
-	paginas      int
-	pedidos      int
+	build, datos, perfil string
+	estadoPagina         int
+	paginas              int
+	pedidos              int
 }
 
 func (f *webDePrueba) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	switch {
-	case strings.HasPrefix(r.URL.Path, "/item/"):
+	case strings.HasPrefix(r.URL.Path, "/item/") || strings.HasPrefix(r.URL.Path, "/user/"):
 		f.paginas++
 		if f.estadoPagina != 0 {
 			w.WriteHeader(f.estadoPagina)
@@ -54,6 +55,9 @@ func (f *webDePrueba) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	case r.URL.Path == "/_next/data/"+f.build+"/es/item/iphone-13-blanco-nuevo-1326730384.json":
 		f.pedidos++
 		_, _ = w.Write([]byte(f.datos))
+	case r.URL.Path == "/_next/data/"+f.build+"/es/user/chollop-474861123.json" && f.perfil != "":
+		f.pedidos++
+		_, _ = w.Write([]byte(f.perfil))
 	default:
 		f.pedidos++
 		http.NotFound(w, r)
@@ -91,7 +95,7 @@ func TestAListingShowsItsData(t *testing.T) {
 		`fetchpriority="high"`,
 		`<label for="ver-2" title="Foto 2">`, `src="/foto/images/10420/lx/wf/__/c1/i2.jpg?ancho=W320"`,
 		`1 / 2`,
-		`href="/user/chollop-474861123"`, "PhoneLab Store V.", "Profesional", "100 valoraciones · 23 ventas",
+		`href="/user/chollop-474861123"`, "PhoneLab Store V.", "Profesional", `★</span> 4,8 · 17 valoraciones · 23 ventas`,
 		`src="/foto/images/13/7u/px/__/c13p474861123/i3621427126.jpg?ancho=W320"`,
 		`href="https://es.wallapop.com/item/iphone-13-blanco-nuevo-1326730384" rel="noreferrer noopener"`,
 	} {

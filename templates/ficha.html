@@ -72,7 +72,7 @@
                 <span class="vendedor-texto">
                     <span><strong>{{ .Alias }}</strong>{{ if .Profesional }} <span class="chapa chapa-envio">Profesional</span>{{ end }}</span>
                     {{ if .Ciudad }}<span class="tenue">{{ .Ciudad }}</span>{{ end }}
-                    <span class="tenue">{{ .Valoraciones }} valoraciones · {{ .Ventas }} ventas</span>
+                    <span class="tenue">{{ with .Nota }}<span class="estrella">★</span> {{ . }} · {{ end }}{{ .Valoraciones }} valoraciones · {{ .Ventas }} ventas</span>
                 </span>
             {{ if .Enlace }}</a>{{ else }}</div>{{ end }}
         </section>

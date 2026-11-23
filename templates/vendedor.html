@@ -1,0 +1,33 @@
+{{ define "contenido" }}
+{{ with .Perfil }}
+<section class="perfil cristal">
+    {{ if .Avatar }}<img class="perfil-avatar" src="{{ .Avatar }}" alt="" width="112" height="112">{{ else }}<span class="perfil-avatar vendedor-inicial" aria-hidden="true">{{ .Inicial }}</span>{{ end }}
+    <div class="perfil-datos">
+        <h1 class="perfil-nombre">{{ .Alias }}</h1>
+        {{ if or .Profesional .Verificado .Vacaciones }}
+        <p class="chapas-ficha">
+            {{ if .Profesional }}<span class="chapa chapa-envio">Profesional</span>{{ end }}
+            {{ if .Verificado }}<span class="chapa chapa-garantia">Verificado</span>{{ end }}
+            {{ if .Vacaciones }}<span class="chapa chapa-reservado">De vacaciones</span>{{ end }}
+        </p>
+        {{ end }}
+        <p class="perfil-cifras">
+            {{ with .Nota }}<span class="estrella">★</span> {{ . }} · {{ end }}{{ .Valoraciones }} valoraciones · {{ .Ventas }} ventas · {{ .Compras }} compras
+            {{ if .Ciudad }}<br>{{ .Ciudad }}{{ end }}
+        </p>
+        {{ if .Descripcion }}<p class="descripcion perfil-descripcion">{{ .Descripcion }}</p>{{ end }}
+        <p class="ficha-wallapop"><a class="boton" href="{{ .EnWallapop }}" rel="noreferrer noopener">Ver el perfil en Wallapop ↗</a></p>
+    </div>
+</section>
+
+<section class="busqueda">
+    <h2 class="busqueda-titulo">En venta</h2>
+    {{ if .Articulos }}
+    {{ template "tarjetas" .Articulos }}
+    {{ else }}
+    <div class="aviso cristal"><p>No tiene nada en venta ahora mismo.</p></div>
+    {{ end }}
+    {{ template "paginas" .Paginacion }}
+</section>
+{{ end }}
+{{ end }}

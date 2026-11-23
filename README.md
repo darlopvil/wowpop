@@ -101,6 +101,7 @@ Flags win over variables.
 | `/` | home page; it never talks to Wallapop |
 | `/search?keywords=…` | search results; `orden=nuevos`, `baratos` or `caros` changes the order, and `b` and `p` open a numbered page of a search wowpop remembers |
 | `/item/…` | a listing, at the same path as on the website, so a redirect only changes the host |
+| `/user/…` | a seller's profile and their items, also at the website's path |
 | `/foto/…` | photos from Wallapop's image server, at the widths the website uses |
 | `/static/…` | styles, fonts and icons |
 | `/about`, `/robots.txt`, `/favicon.ico` | |
