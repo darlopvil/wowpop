@@ -49,7 +49,7 @@ func TestSearchShowsACardPerItem(t *testing.T) {
 	for _, texto := range []string{
 		`«game boy»`,
 		`value="game boy"`,
-		`href="/item/nintendo-game-boy-pocket-plateada-1326885872"`,
+		`href="/item/nintendo-game-boy-pocket-plateada-1326885872" target="_blank" rel="noopener"`,
 		`src="/foto/images/10420/lx/zr/__/c10420p1326885872/i6880198806.jpg?ancho=W320"`,
 		"Nintendo Game Boy Pocket Plateada",
 		"30\u00a0€", "1.250\u00a0€", "12,99\u00a0€",

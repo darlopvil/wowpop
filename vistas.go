@@ -18,6 +18,8 @@ type datosPagina struct {
 	Inicio bool
 	// Resultados is a page of search results.
 	Resultados *resultadosBusqueda
+	// Ficha is a listing.
+	Ficha *ficha
 	// Volver, on an error page, links a fresh copy of what failed instead
 	// of the home page.
 	Volver string
@@ -39,6 +41,7 @@ var plantillas = map[string]*template.Template{
 	"about":    cargarPlantilla("about"),
 	"error":    cargarPlantilla("error"),
 	"busqueda": cargarPlantilla("busqueda"),
+	"ficha":    cargarPlantilla("ficha"),
 }
 
 // renderizar executes the template into a buffer before writing anything, so

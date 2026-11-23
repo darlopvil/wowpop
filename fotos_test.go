@@ -33,6 +33,9 @@ func TestPhotoLinksOnlyComeFromTheImageServer(t *testing.T) {
 			t.Errorf("%q: %q, want %q", original, got, want)
 		}
 	}
+	if rutaFoto("https://cdn.wallapop.com/images/a/b.jpg", "W1024") != "/foto/images/a/b.jpg?ancho=W1024" {
+		t.Error("W1024 is the biggest real size")
+	}
 	if rutaFoto("https://cdn.wallapop.com/images/a/b.jpg", "W9999") != "" {
 		t.Error("unknown widths are refused")
 	}

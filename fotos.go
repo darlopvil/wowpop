@@ -21,13 +21,13 @@ import (
 // hostFotos is where the photo URLs in Wallapop's answers point.
 const hostFotos = "cdn.wallapop.com"
 
-// limiteFoto is far above the biggest photo the website shows (W800, about
-// 150 KB).
+// limiteFoto is far above the biggest photo the image server has (W1024,
+// about 150 KB).
 const limiteFoto = 4 << 20
 
 var (
 	reRutaFoto    = regexp.MustCompile(`^images/[A-Za-z0-9_/-]{1,200}\.(jpg|jpeg|png|webp)$`)
-	anchosFoto    = map[string]bool{"W320": true, "W640": true, "W800": true}
+	anchosFoto    = map[string]bool{"W320": true, "W640": true, "W800": true, "W1024": true}
 	cabecerasFoto = []string{"Content-Type", "Cache-Control", "ETag", "Last-Modified", "Expires"}
 )
 

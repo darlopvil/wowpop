@@ -12,7 +12,7 @@
     <ul class="resultados">
         {{ range .Articulos }}
         <li>
-            <a class="tarjeta{{ if .Reservado }} tarjeta-reservada{{ end }}"{{ if .Enlace }} href="{{ .Enlace }}"{{ end }}>
+            <a class="tarjeta{{ if .Reservado }} tarjeta-reservada{{ end }}"{{ if .Enlace }} href="{{ .Enlace }}" target="_blank" rel="noopener"{{ end }}>
                 <span class="tarjeta-foto">
                     {{ if .Foto }}<img src="{{ .Foto }}" alt="" width="320" height="320" loading="lazy">{{ end }}
                     {{ if or .Reservado .Envio .Garantia .Destacado }}

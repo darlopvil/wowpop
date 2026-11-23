@@ -1,0 +1,90 @@
+{{ define "contenido" }}
+{{ with .Ficha }}
+<article class="ficha">
+    <div class="ficha-fotos">
+        {{ if .Fotos }}
+        {{/* One radio button per photo, each right before its photo: the
+             checked one is shown. Arrows and thumbnails are labels of those
+             buttons, so changing photo touches neither the address nor the
+             scroll, and the keyboard arrows work on the group. No script.
+             All photos load with the page, the first one first, so moving
+             through them never waits; the browser keeps them a year. */}}
+        <div class="galeria{{ if or .Vendido .Caducado .Reservado }} galeria-apagada{{ end }}">
+            {{ range .Fotos }}
+            <input class="galeria-radio" type="radio" name="foto" id="ver-{{ .Numero }}" aria-label="Foto {{ .Numero }} de {{ .Total }}"{{ if eq .Numero 1 }} checked{{ end }}>
+            <figure class="galeria-foto">
+                <a href="{{ .Completa }}" target="_blank" rel="noopener" title="Abrir la foto en grande"><img src="{{ .Grande }}" alt="Foto {{ .Numero }} de {{ .Total }}" decoding="async"{{ if eq .Numero 1 }} fetchpriority="high"{{ end }}></a>
+                {{ if gt .Total 1 }}
+                <label class="flecha flecha-anterior" for="ver-{{ .Anterior }}" title="Foto anterior">‹</label>
+                <label class="flecha flecha-siguiente" for="ver-{{ .Siguiente }}" title="Foto siguiente">›</label>
+                <span class="galeria-contador">{{ .Numero }} / {{ .Total }}</span>
+                {{ end }}
+            </figure>
+            {{ end }}
+        </div>
+        {{ if gt (len .Fotos) 1 }}
+        <div class="miniaturas">
+            {{ range .Fotos }}<label for="ver-{{ .Numero }}" title="Foto {{ .Numero }}"><img src="{{ .Chica }}" alt="" width="320" height="320" loading="lazy"></label>{{ end }}
+        </div>
+        {{ end }}
+        {{ else }}
+        <div class="galeria galeria-vacia"><span class="tenue">Sin fotos</span></div>
+        {{ end }}
+    </div>
+
+    <div class="ficha-datos">
+        <section class="cristal ficha-principal">
+            {{ if .Categorias }}<p class="ficha-categorias">{{ .Categorias }}</p>{{ end }}
+            <h1 class="ficha-titulo">{{ .Titulo }}</h1>
+            <p class="ficha-precio">{{ .Precio }}</p>
+            {{ if or .Vendido .Caducado .Reservado .Envio .Destacado .Reacondicionado }}
+            <p class="chapas-ficha">
+                {{ if .Vendido }}<span class="chapa chapa-vendido">Vendido</span>{{ end }}
+                {{ if .Caducado }}<span class="chapa chapa-vendido">Caducado</span>{{ end }}
+                {{ if .Reservado }}<span class="chapa chapa-reservado">Reservado</span>{{ end }}
+                {{ if .Envio }}<span class="chapa chapa-envio">Envío</span>{{ end }}
+                {{ if .Reacondicionado }}<span class="chapa chapa-garantia">Reacondicionado</span>{{ end }}
+                {{ if .Destacado }}<span class="chapa chapa-destacado">Destacado</span>{{ end }}
+            </p>
+            {{ end }}
+            <p class="ficha-meta">
+                {{ if .Ciudad }}{{ .Ciudad }} · {{ end }}{{ if .Envio }}Con envío{{ else }}Solo entrega en mano{{ end }}
+                {{ if .Fecha }}<br>Actualizado el {{ .Fecha }} · {{ .Visitas }} visitas · {{ .Favoritos }} favoritos{{ end }}
+            </p>
+            <p class="ficha-wallapop"><a class="boton" href="{{ .EnWallapop }}" rel="noreferrer noopener">Comprar o escribir en Wallapop ↗</a></p>
+        </section>
+
+        {{ if .Detalles }}
+        <section class="cristal ficha-bloque">
+            <h2>Características</h2>
+            <dl class="detalles">
+                {{ range .Detalles }}<dt>{{ .Nombre }}</dt><dd>{{ .Valor }}</dd>
+                {{ end }}
+            </dl>
+        </section>
+        {{ end }}
+
+        {{ with .Vendedor }}{{ if .Alias }}
+        <section class="cristal ficha-bloque">
+            <h2>Vendedor</h2>
+            {{ if .Enlace }}<a class="vendedor" href="{{ .Enlace }}">{{ else }}<div class="vendedor">{{ end }}
+                {{ if .Avatar }}<img class="vendedor-avatar" src="{{ .Avatar }}" alt="" width="64" height="64">{{ else }}<span class="vendedor-avatar vendedor-inicial" aria-hidden="true">{{ .Inicial }}</span>{{ end }}
+                <span class="vendedor-texto">
+                    <span><strong>{{ .Alias }}</strong>{{ if .Profesional }} <span class="chapa chapa-envio">Profesional</span>{{ end }}</span>
+                    {{ if .Ciudad }}<span class="tenue">{{ .Ciudad }}</span>{{ end }}
+                    <span class="tenue">{{ .Valoraciones }} valoraciones · {{ .Ventas }} ventas</span>
+                </span>
+            {{ if .Enlace }}</a>{{ else }}</div>{{ end }}
+        </section>
+        {{ end }}{{ end }}
+    </div>
+
+    {{ if .Descripcion }}
+    <section class="cristal ficha-bloque ficha-descripcion">
+        <h2>Descripción</h2>
+        <p class="descripcion">{{ .Descripcion }}</p>
+    </section>
+    {{ end }}
+</article>
+{{ end }}
+{{ end }}

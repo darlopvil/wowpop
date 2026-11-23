@@ -11,6 +11,7 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -41,6 +42,11 @@ type clienteWallapop struct {
 	// pages, whose data comes from Next.js (_next/data and __NEXT_DATA__);
 	// cdn serves the photos.
 	api, web, cdn string
+
+	// buildID is the website's current Next.js build, which its data URLs
+	// carry; see datosweb.go.
+	mu      sync.Mutex
+	buildID string
 }
 
 var wallapop = nuevoCliente("https://api.wallapop.com", "https://es.wallapop.com")

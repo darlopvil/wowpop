@@ -579,6 +579,289 @@ h1, h2, h3 {
 
 .paginas-hueco { color: var(--tenue); }
 
+/* ---------- listing ---------- */
+
+.ficha {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    grid-template-areas: "fotos datos" "descripcion datos";
+    align-items: start;
+    gap: 1.2rem;
+}
+
+.ficha-fotos { grid-area: fotos; }
+
+.ficha-datos {
+    grid-area: datos;
+    display: grid;
+    gap: 1.2rem;
+}
+
+.ficha-descripcion { grid-area: descripcion; }
+
+/* The gallery shows the photo whose radio button is checked (see
+   ficha.html); arrows and thumbnails are labels of those buttons. */
+.galeria {
+    position: relative;
+    aspect-ratio: 1;
+    overflow: hidden;
+    border: 1px solid var(--cristal-borde);
+    border-radius: 16px;
+    background: radial-gradient(circle at 50% 40%, rgba(127, 243, 226, .1), rgba(0, 0, 0, .35));
+    box-shadow: var(--cristal-brillo), var(--sombra);
+}
+
+.galeria-radio {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1px;
+    height: 1px;
+    margin: 0;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.galeria-foto {
+    display: none;
+    position: absolute;
+    inset: 0;
+    margin: 0;
+}
+
+.galeria-radio:checked + .galeria-foto { display: block; }
+
+.galeria-radio:focus-visible + .galeria-foto {
+    outline: 2px solid var(--aqua-claro);
+    outline-offset: -4px;
+    border-radius: 16px;
+}
+
+.galeria-foto a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    cursor: zoom-in;
+}
+
+/* Transparent text keeps the alt text from flashing while a photo loads. */
+.galeria-foto img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    color: transparent;
+}
+
+.galeria-apagada img {
+    opacity: .6;
+    filter: saturate(.6);
+}
+
+.galeria-vacia {
+    display: grid;
+    place-items: center;
+}
+
+/* Glossy round arrows over the photo. */
+.flecha {
+    position: absolute;
+    top: 50%;
+    width: 2.6rem;
+    height: 2.6rem;
+    display: grid;
+    place-items: center;
+    padding-bottom: .15em;
+    border: 1px solid var(--aqua-oscuro);
+    border-radius: 50%;
+    font-size: 1.9rem;
+    line-height: 1;
+    color: #022a25;
+    cursor: pointer;
+    user-select: none;
+    background: linear-gradient(180deg, var(--aqua-claro) 0%, var(--aqua-vivo) 48%, var(--aqua) 52%, #19d3bc 100%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .75), 0 2px 10px rgba(0, 0, 0, .5);
+    opacity: .85;
+    transform: translateY(-50%);
+    transition: opacity .15s, box-shadow .15s;
+}
+
+.flecha:hover {
+    opacity: 1;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .8), 0 0 16px rgba(46, 230, 207, .7);
+}
+
+.flecha-anterior { left: .7rem; }
+
+.flecha-siguiente { right: .7rem; }
+
+.galeria-contador {
+    position: absolute;
+    right: .7rem;
+    bottom: .7rem;
+    padding: .15em .65em;
+    border-radius: 999px;
+    font-size: .8rem;
+    color: var(--texto);
+    background: rgba(3, 11, 22, .6);
+    pointer-events: none;
+}
+
+.miniaturas {
+    display: flex;
+    gap: .5rem;
+    margin-top: .7rem;
+    overflow-x: auto;
+    padding: .2rem .1rem .4rem;
+}
+
+.miniaturas label {
+    flex: 0 0 72px;
+    height: 72px;
+    overflow: hidden;
+    border: 1px solid var(--cristal-borde);
+    border-radius: 10px;
+    cursor: pointer;
+    opacity: .65;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .2);
+    transition: opacity .15s, box-shadow .15s;
+}
+
+.miniaturas label:hover { opacity: 1; }
+
+/* The thumbnail of the photo on show (Wallapop allows up to 20 photos). */
+.ficha-fotos:has(#ver-1:checked) [for="ver-1"],
+.ficha-fotos:has(#ver-2:checked) [for="ver-2"],
+.ficha-fotos:has(#ver-3:checked) [for="ver-3"],
+.ficha-fotos:has(#ver-4:checked) [for="ver-4"],
+.ficha-fotos:has(#ver-5:checked) [for="ver-5"],
+.ficha-fotos:has(#ver-6:checked) [for="ver-6"],
+.ficha-fotos:has(#ver-7:checked) [for="ver-7"],
+.ficha-fotos:has(#ver-8:checked) [for="ver-8"],
+.ficha-fotos:has(#ver-9:checked) [for="ver-9"],
+.ficha-fotos:has(#ver-10:checked) [for="ver-10"],
+.ficha-fotos:has(#ver-11:checked) [for="ver-11"],
+.ficha-fotos:has(#ver-12:checked) [for="ver-12"],
+.ficha-fotos:has(#ver-13:checked) [for="ver-13"],
+.ficha-fotos:has(#ver-14:checked) [for="ver-14"],
+.ficha-fotos:has(#ver-15:checked) [for="ver-15"],
+.ficha-fotos:has(#ver-16:checked) [for="ver-16"],
+.ficha-fotos:has(#ver-17:checked) [for="ver-17"],
+.ficha-fotos:has(#ver-18:checked) [for="ver-18"],
+.ficha-fotos:has(#ver-19:checked) [for="ver-19"],
+.ficha-fotos:has(#ver-20:checked) [for="ver-20"] {
+    opacity: 1;
+    border-color: var(--aqua);
+    box-shadow: 0 0 12px rgba(46, 230, 207, .55);
+}
+
+.miniaturas img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.ficha-principal, .ficha-bloque { padding: 1.2rem 1.4rem; }
+
+.ficha-bloque h2 {
+    margin: 0 0 .7rem;
+    font-size: 1.15rem;
+}
+
+.ficha-categorias {
+    margin: 0 0 .4rem;
+    font-size: .82rem;
+    color: var(--tenue);
+}
+
+.ficha-titulo {
+    margin: 0;
+    font-size: 1.5rem;
+    overflow-wrap: anywhere;
+}
+
+.ficha-precio {
+    margin: .4rem 0 .6rem;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--aqua-claro);
+    text-shadow: 0 0 18px rgba(46, 230, 207, .35);
+}
+
+.chapas-ficha {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .3rem;
+    margin: 0 0 .7rem;
+}
+
+.chapa-vendido { background: linear-gradient(180deg, #ffc2c2 0%, #ff6b6b 48%, #e04040 52%, #ff8a8a 100%); }
+
+.ficha-meta {
+    margin: 0 0 1rem;
+    font-size: .9rem;
+    color: var(--tenue);
+}
+
+.ficha-wallapop { margin: 0; }
+
+.detalles {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: .35rem 1rem;
+    margin: 0;
+}
+
+.detalles dt { color: var(--tenue); }
+
+.detalles dd {
+    margin: 0;
+    overflow-wrap: anywhere;
+}
+
+.vendedor {
+    display: flex;
+    align-items: center;
+    gap: .9rem;
+    color: var(--texto);
+    text-decoration: none;
+}
+
+a.vendedor:hover { color: #fff; }
+
+.vendedor-avatar {
+    flex: 0 0 64px;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--cristal-borde);
+    box-shadow: 0 0 14px rgba(46, 230, 207, .25);
+}
+
+.vendedor-inicial {
+    display: grid;
+    place-items: center;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #022a25;
+    background: linear-gradient(180deg, var(--aqua-claro) 0%, var(--aqua-vivo) 48%, var(--aqua) 52%, #19d3bc 100%);
+}
+
+.vendedor-texto {
+    display: flex;
+    flex-direction: column;
+    gap: .15rem;
+    font-size: .9rem;
+}
+
+.descripcion {
+    margin: 0;
+    white-space: pre-line;
+    overflow-wrap: anywhere;
+}
+
 /* ---------- footer ---------- */
 
 .pie {
@@ -754,6 +1037,18 @@ h1, h2, h3 {
     .pecera img { transform: scaleX(-1); }
 }
 
+/* ---------- narrow screens ---------- */
+
+/* The listing goes to one column before the rest of the layout does. */
+@media (max-width: 900px) {
+    .ficha {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-areas: "fotos" "datos" "descripcion";
+    }
+
+    .ficha-precio { font-size: 1.7rem; }
+}
+
 /* ---------- small screens ---------- */
 
 @media (max-width: 640px) {
@@ -776,6 +1071,8 @@ h1, h2, h3 {
     .pecera { left: 10px; top: 360px; width: 92px; height: 92px; }
 
     .texto-icono { width: 60px; }
+
+    .detalles { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
 
     .resultados {
         grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
